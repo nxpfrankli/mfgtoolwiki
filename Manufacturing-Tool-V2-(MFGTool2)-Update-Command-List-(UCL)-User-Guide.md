@@ -68,33 +68,11 @@ The commands actually executed by OS image are downloaded in Command lists. As a
 | mknod 	| device_class, device_item,node_to_create, type | Create the device node by parsing sysfs entry. Example:
 `mknod class/mtd,mtd0,/dev/mtd0 `|
 | read 	        | string 	| Read the file specified by parameter and send it to the host. If there is no such file, the appropriate status will be returned. |
-| send 	        | None 	         | Receive the file from the host. Subsequent shell commands can refer to the file received as $FILE. Example: ```
-<CMD type="push" body="send" file="stmp378x_ta1_linux.sb/>
-<CMD type=”push” body=”$ kobs-ng init -d $FILE" /> 
-```|
+| send 	        | None 	         | Receive the file from the host. Subsequent shell commands can refer to the file received as $FILE. Example: ` <CMD type="push" body="send" file="stmp378x_ta1_linux.sb/> <CMD type=”push” body=”$ kobs-ng init -d $FILE" /> `|
 |selftest 	|None 	|Perform self-diagnostic; returns either pass or appropriate
-| status. | Implemented as empty function in current release.
-| save 	|string 	|Save the file received by command “send” to the file specified as parameter. 
-| pipe 	 |string| require file attribute 	Execute shell command and read data from stdio pipe IN. mfg will send file to stdio pipe OUT. It is useful for big data transfer, more than physical memory size ```
-<CMD type="push" body="pipe tar -xv -C /mnt/ubi0" file="files/rootfs.tar"/>
-<CMD type="push" body="flush">Finish Flashing NAND</CMD> ``` Note: The above two commands must be combined to use Recommend: Please add below command prior to pipe command to free some memory.
-```<CMD type="push" body="$ echo 3 > /proc/sys/vm/drop_caches">release memory</CMD>```
-| wff |	NONE |	Deprecate Prepare Write firmware to flash.
-| wfs |	NONE |	Deprecate Prepare Write firmware to SD CARD.
-| ffs |	NONE |	Write firmware to SD.
-| wrf |	NONE,  | require file attribute 	ubiformat nand with ubi image.  Example ```
-<CMD type="push" body="wrf" file="files/rootfs.tar"/>
-<CMD type="push" body="frf">Finish Flashing NAND</CMD> ```
-| wrs | 	number of sd partition
-require file attribute 	Write rootfs image to sd card.
-Example
-```
-<CMD type="push" body="wrs2" file="files/rootfs.ext2"/>
-<CMD type="push" body="frs">Finish Flashing NAND</CMD>
-```
-You can also use 
-<CMD type="push" body="pipe dd of=/dev/mmcblkp2 bs=1K" file="files/rootfs.ext2"/?
-<CMD type="push" body="frs">Finish Flashing NAND</CMD> 
+| status.       |               | Implemented as empty function in current release.
+| save 	        |string 	|Save the file received by command “send” to the file specified as parameter. 
+| pipe 	        |string         | require file attribute. Execute shell command and read data from stdio pipe IN. mfg will send file to stdio pipe OUT. It is useful for big data transfer, more than physical memory size ```<CMD type="push" body="pipe tar -xv -C /mnt/ubi0" file="files/rootfs.tar"/><CMD type="push" body="flush">Finish Flashing NAND</CMD> ```Note: The above two commands must be combined to use Recommend: Please add below command prior to pipe command to free some memory.```<CMD type="push" body="$ echo 3 > /proc/sys/vm/drop_caches">release memory</CMD>```
 | frf |	NONE |	same as flush 
 | frs |	NONE |	same as flush 
 
