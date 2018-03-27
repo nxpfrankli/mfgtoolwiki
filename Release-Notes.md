@@ -1,3 +1,10 @@
+## Version: 2.8.0
+
+### New Features
+* Support QXP B0 chip
+* Support USB3.0
+* Support BCDDevice distinguish QXP B0 and A0 
+
 ## Version: 2.1.0
 
 This application is verified on WIN7 32bit/64bit and WINXP Professional. It is not verified on other windows platforms.
