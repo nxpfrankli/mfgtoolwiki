@@ -37,81 +37,73 @@ The example below shows a typical command. “state” indicates the phase of th
 ### command type: `load` 
 Download an image to RAM. It is strongly recommended to follow the example provided in release package since it involves ROM code parameters which may not be easy to understand.
 
-* file: specify the path and name of the image file, path related UCL.xml file.
-* address: specifies the RAM address where the image is located.
-* loadSection: a parameter used by ROM code, should be set to “OTH” 
-* setSection: a parameter used by ROM code, should be set to “OTH” if there are other images to be loaded; set to “APP” if the last image is loaded.
-* HasFlashHeader: set TRUE if the image contains a flash header, or set to FALSE.
-* CodeOffset: the address offset of first executed instruct within the image.
+| parameters | Description |
+| ---------- | ------------|
+| file       | specify the path and name of the image file, path related UCL.xml file. |
+| address    | specifies the RAM address where the image is located.
+| loadSection| a parameter used by ROM code, should be set to “OTH” 
+| setSection | a parameter used by ROM code, should be set to “OTH” if there are other images to be loaded; set to “APP” if the last image is loaded.
+| HasFlashHeader | set TRUE if the image contains a flash header, or set to FALSE.
+| CodeOffset | the address offset of first executed instruct within the image. **The command is only for Bulk-IO mode i.MX device except i.MX50 HID mode device.**
  
 ### command type: `jump` 
-			Notify ROM code to jump to the RAM image to run. The command must be followed after a load command in which setSection value is set to “APP”.
-The command is only for Bulk-IO mode i.MX device except i.MX50 HID mode device.
-boot	Recovery	File
-if	Download an image to RAM.
-2.2.2	Firmware Specific Commands
+			
+Notify ROM code to jump to the RAM image to run. The command must be followed after a load command in which setSection value is set to “APP”.
+
+### command type: `boot`
+Download an image to RAM.
+
+### Firmware Specific Commands
+
 If a command is typed as “push”, which means the command is parsed and executed by the targeted device instead of host, the only thing host has to do is to send the command to the targeted device.
 The commands actually executed by OS image are downloaded in Command lists. As a result, each OS has its own commands.
 
-Command 	Arguments 	Description 
-? 	None 	Request to send the device identity information in XML form 
-! 	integer 	Initiate the reboot depending on argument. 3 means reboot while
-other values will force a shutdown. 
-$ 	string 	Execute shell command
-Example:
-$ echo 'hello from utp' 
-flush 	None 	Wait for all data transfer to be finished and processed.
-ffs 	None 	Partition the SD card and flash the boot stream to it.
-mknod 	device_class,
-device_item,node_t
-o_create, type 	Create the device node by parsing sysfs entry.
-Example:
-mknod class/mtd,mtd0,/dev/mtd0 
-read 	string 	Read the file specified by parameter and send it to the host. If
-there is no such file, the appropriate status will be returned. 
-send 	None 	Receive the file from the host. Subsequent shell commands can
-refer to the file received as $FILE.
-Example:
+|Command 	| Arguments 	| Description|
+|---------------| --------------| -----------|
+| ?  	        | None          |	Request to send the device identity information in XML form |
+| ! 	        | integer 	| Initiate the reboot depending on argument. 3 means reboot while other values will force a shutdown. |
+| $ 	        | string 	| Execute shell command. Example:  ` $ echo 'hello from utp' ` | 
+| flush 	|  None 	| Wait for all data transfer to be finished and processed. |
+| ffs 	        |  None 	| Partition the SD card and flash the boot stream to it. |
+| mknod 	| device_class, device_item,node_to_create, type | Create the device node by parsing sysfs entry. Example:
+`mknod class/mtd,mtd0,/dev/mtd0 `|
+| read 	        | string 	| Read the file specified by parameter and send it to the host. If there is no such file, the appropriate status will be returned. |
+| send 	        | None 	         | Receive the file from the host. Subsequent shell commands can refer to the file received as $FILE. Example: ```
 <CMD type="push" body="send" file="stmp378x_ta1_linux.sb/>
 <CMD type=”push” body=”$ kobs-ng init -d $FILE" /> 
-selftest 	None 	Perform self-diagnostic; returns either pass or appropriate
-status. Implemented as empty function in current release.
-save 	string 	Save the file received by command “send” to the file specified
-as parameter. 
-pipe 	string 
-require file attribute 	Execute shell command and read data from stdio pipe IN. mfg will send file to stdio pipe OUT.
-It is useful for big data transfer, more than physical memory size 
+```|
+|selftest 	|None 	|Perform self-diagnostic; returns either pass or appropriate
+| status. | Implemented as empty function in current release.
+| save 	|string 	|Save the file received by command “send” to the file specified as parameter. 
+| pipe 	 |string| require file attribute 	Execute shell command and read data from stdio pipe IN. mfg will send file to stdio pipe OUT. It is useful for big data transfer, more than physical memory size ```
 <CMD type="push" body="pipe tar -xv -C /mnt/ubi0" file="files/rootfs.tar"/>
-<CMD type="push" body="flush">Finish Flashing NAND</CMD> 
-Note: The above two commands must be combined to use 
-Recommend: Please add below command prior to pipe command to free some memory.
-<CMD type="push" body="$ echo 3 > /proc/sys/vm/drop_caches">release memory</CMD>
-wff 	NONE 	Deprecate
-Prepare Write firmware to flash.
-wfs 	NONE 	Deprecate
-Prepare Write firmware to SD CARD.
-ffs 	NONE 	Write firmware to SD.
-wrf 	NONE,  
-require file attribute 	ubiformat nand with ubi image. 
-Example
+<CMD type="push" body="flush">Finish Flashing NAND</CMD> ``` Note: The above two commands must be combined to use Recommend: Please add below command prior to pipe command to free some memory.
+```<CMD type="push" body="$ echo 3 > /proc/sys/vm/drop_caches">release memory</CMD>```
+| wff |	NONE |	Deprecate Prepare Write firmware to flash.
+| wfs |	NONE |	Deprecate Prepare Write firmware to SD CARD.
+| ffs |	NONE |	Write firmware to SD.
+| wrf |	NONE,  | require file attribute 	ubiformat nand with ubi image.  Example ```
 <CMD type="push" body="wrf" file="files/rootfs.tar"/>
-<CMD type="push" body="frf">Finish Flashing NAND</CMD> 
-wrs 	number of sd partition
+<CMD type="push" body="frf">Finish Flashing NAND</CMD> ```
+| wrs | 	number of sd partition
 require file attribute 	Write rootfs image to sd card.
 Example
+```
 <CMD type="push" body="wrs2" file="files/rootfs.ext2"/>
 <CMD type="push" body="frs">Finish Flashing NAND</CMD>
-
+```
 You can also use 
 <CMD type="push" body="pipe dd of=/dev/mmcblkp2 bs=1K" file="files/rootfs.ext2"/?
 <CMD type="push" body="frs">Finish Flashing NAND</CMD> 
-frf 	NONE 	same as flush 
-frs 	NONE 	same as flush 
-2.2.2.1	OTP Bits Programming
+| frf |	NONE |	same as flush 
+| frs |	NONE |	same as flush 
+
+###	OTP Bits Programming
 
 Command below shows how to write a file to a disk:
+```
   <CMD state="Updater" type="push" body="$ ls /sys/fsl_otp ">Showing HW_OCOTP fuse bank</CMD>
   <CMD state="Updater" type="push" body="$ echo 0x11223344 > /sys/fsl_otp/HW_OCOTP_MAC0">write 0x11223344 to HW_OCOTP_MAC0 fuse bank</CMD>
   <CMD state="Updater" type="push" body="$ cat /sys/fsl_otp/HW_OCOTP_MAC0">Read value from HW_OCOTP_MAC0 fuse bank</CMD>
 The fuse bank name (ex: HW_OCOTP_MAC0) should be set as needed.
-
+```
