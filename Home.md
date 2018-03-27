@@ -1,3 +1,6 @@
-Welcome to the mfgtools wiki!
+Welcome to the mfgtools
 
-# Latest Windows Version Release is v2.8.0
+# Windows Version
+
+## Latest Windows Version Release is v2.8.0
+[Release Notes](Release Notes)
