@@ -1,6 +1,8 @@
 ## Version: 2.8.0
+Windows XP drop in this version. 
 
 ### New Features
+* Support Windows 10
 * Support QXP B0 chip
 * Support USB3.0
 * Support BCDDevice distinguish QXP B0 and A0 
