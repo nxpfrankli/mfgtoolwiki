@@ -10,38 +10,42 @@ Mfg tool uses global configuration to recognize which device the user wants to f
 
 Let’s explain it by an example.
 
-`  <CFG>
+```  
+<CFG>
 <STATE name="BootStrap" dev="MX6Q" vid="15A2" pid="0054"/>
 <STATE name="Updater"   dev="MSC" vid="066F" pid="37FF"/> 
-  </CFG>
-`
+</CFG>
+```
 
-Global configuration is contained between parameter <CFG> and </CFG>.
-<STATE name="BootStrap" dev="MX6Q" vid="15A2" pid="0054"/> indicates the first phase of the burning process, the phase name is “BootStrap”, and a device named “MX6Q” should be connected with the USB pid “0054” and vid “15A2”. For i.MX 6 serial, in the phase “BootStrap”, the valid strings for dev are: “MX6Q”, “MX6D”, “MX6SL”; in the phase “Updater”, the valid string for dev is: “MSC”. 
-<STATE name="Updater"   dev="MSC" vid="066F" pid="37FF"/> indicates the second phase of the burning process, the phase name is “Updater”, and a device named “MSC” should be connected with the USB pid “37FF” and vid “066F”. 
-2.2	Update Command List
+Global configuration is contained between parameter `<CFG>` and `</CFG>`.
+
+`<STATE name="BootStrap" dev="MX6Q" vid="15A2" pid="0054"/>` indicates the first phase of the burning process, the phase name is “BootStrap”, and a device named “MX6Q” should be connected with the USB pid “0054” and vid “15A2”. For i.MX 6 serial, in the phase “BootStrap”, the valid strings for dev are: “MX6Q”, “MX6D”, “MX6SL”; in the phase “Updater”, the valid string for dev is: “MSC”. 
+
+`<STATE name="Updater"   dev="MSC" vid="066F" pid="37FF"/>` indicates the second phase of the burning process, the phase name is “Updater”, and a device named “MSC” should be connected with the USB pid “37FF” and vid “066F”. 
+
+###	Update Command List
 The tool uses Update Command List (UCL) to specify all the user tasks. The UCL contains a distinct list for each use case. Each list contains a set of command elements with attributes for the command type, body, and payload. The command element text provides a user interface message for the current operation. 
-Each UCL begins from <LIST name=”xx”, desc=”xxx”> while ending with </LIST>, the name of which can be specified by users. Parameter “desc” is used for comment purpose.
+Each UCL begins from `<LIST name=”xx”, desc=”xxx”>` while ending with `</LIST>`, the name of which can be specified by users. Parameter “desc” is used for comment purpose.
 There are two types of commands: host specific commands and firmware specific commands. Host specific commands are parsed and executed by host tool while firmware specific commands are parsed and executed by firmware runs on targeted device.
-2.2.1	Host Specific Commands
+
+###	Host Specific Commands
 The example below shows a typical command. “state” indicates the phase of the command executed and “type” specifies the type of a command. “body” is a parameter of the command. “file” is another parameter. “Loading Kernel” is a description of the command.
+```
 <CMD state="BootStrap" type="load" file="uImage" address="0x10800000"
         loadSection="OTH" setSection="OTH" HasFlashHeader="FALSE" >Loading Kernel.</CMD>
-Command type	Body	Other parameters	Description
-load		file
-Address
-loadSection
-setSection
-HasFlashHeader
-CodeOffset	Download an image to RAM. It is strongly recommended to follow the example provided in release package since it involves ROM code parameters which may not be easy to understand.
-file: specify the path and name of the image file.
-Parameter “address” specifies the RAM address where the image is located.
-loadSection: a parameter used by ROM code, should be set to “OTH” 
-setSection: a parameter used by ROM code, should be set to “OTH” if there are other images to be loaded; set to “APP” if the last image is loaded. 
-HasFlashHeader: set TRUE if the image contains a flash header, or set to FALSE.
-CodeOffset: the address offset of first executed instruct within the image.
-The command is only for Bulk-IO mode i.MX device except i.MX50 HID mode device.
-jump			Notify ROM code to jump to the RAM image to run. The command must be followed after a load command in which setSection value is set to “APP”.
+```
+### command type: `load` 
+Download an image to RAM. It is strongly recommended to follow the example provided in release package since it involves ROM code parameters which may not be easy to understand.
+
+* file: specify the path and name of the image file, path related UCL.xml file.
+* address: specifies the RAM address where the image is located.
+* loadSection: a parameter used by ROM code, should be set to “OTH” 
+* setSection: a parameter used by ROM code, should be set to “OTH” if there are other images to be loaded; set to “APP” if the last image is loaded.
+* HasFlashHeader: set TRUE if the image contains a flash header, or set to FALSE.
+* CodeOffset: the address offset of first executed instruct within the image.
+ 
+### command type: `jump` 
+			Notify ROM code to jump to the RAM image to run. The command must be followed after a load command in which setSection value is set to “APP”.
 The command is only for Bulk-IO mode i.MX device except i.MX50 HID mode device.
 boot	Recovery	File
 if	Download an image to RAM.
