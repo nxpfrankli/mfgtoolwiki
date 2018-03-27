@@ -83,5 +83,6 @@ Command below shows how to write a file to a disk:
   <CMD state="Updater" type="push" body="$ ls /sys/fsl_otp ">Showing HW_OCOTP fuse bank</CMD>
   <CMD state="Updater" type="push" body="$ echo 0x11223344 > /sys/fsl_otp/HW_OCOTP_MAC0">write 0x11223344 to HW_OCOTP_MAC0 fuse bank</CMD>
   <CMD state="Updater" type="push" body="$ cat /sys/fsl_otp/HW_OCOTP_MAC0">Read value from HW_OCOTP_MAC0 fuse bank</CMD>
-The fuse bank name (ex: HW_OCOTP_MAC0) should be set as needed.
 ```
+The fuse bank name (ex: HW_OCOTP_MAC0) should be set as needed.
+
