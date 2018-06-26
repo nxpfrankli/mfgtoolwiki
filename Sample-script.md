@@ -1,4 +1,4 @@
-# burn android to eMMC
+# Burn android to eMMC
 
     uuu_version 1.0.1
     SDPS: boot -f flash.bin
@@ -19,9 +19,9 @@
     FB: ucmd mmc partconf 0 1 1 0
     FB: Done
 
-# burn yocto image to eMMC
+# Burn yocto image to eMMC
     
-# use kernel burn image to eMMC (similar with old mfgtools xml)
+# Use kernel burn image to eMMC (similar with old mfgtools xml)
 
     uuu_version 1.0.1
     SDPS: boot -f flash_mfg.bin
