@@ -12,7 +12,14 @@
         SDP:     MX6SLL  0x1fc9  0x0128
         SDP:     MX7ULP  0x1fc9  0x0054
         SDP:     MXRT106X  0x1fc9  0x0135
+        SDPU:    SPL     0x0525  0xb4a4
         FBK:             0x066f  0x9afe
         FBK:             0x066f  0x9bff
         FB:              0x0525  0xa4a5
         FB:              0x18d1  0x0d02
+
+
+SDP:   i.MX6/7 ROM download protocol
+SDPU:  uboot implement simplified ROM SDP protocol
+FB:    Android fastboot protocol
+FBK:   Android fastboot protocol, implement at initramfs. See project imx-uuu  
