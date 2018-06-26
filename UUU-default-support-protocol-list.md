@@ -20,6 +20,9 @@
 
 
 SDP:   i.MX6/7 ROM download protocol
+
 SDPU:  uboot implement simplified ROM SDP protocol
+
 FB:    Android fastboot protocol
+
 FBK:   Android fastboot protocol, implement at initramfs. See project imx-uuu  
