@@ -1,6 +1,7 @@
 Welcome to the uuu. Old name mfgtools.
 
-[Example](Example)
+Sample Usage: [Example](Example)
+Sample Script: 
 
 # Usage:
 
