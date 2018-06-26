@@ -34,6 +34,10 @@
     uuu FB: download –f imx8qxp_mek.dtb
     uuu FB: acmd booti ${loadaddr} - ${fdt_addr}
 
+Extended environment for fastboot
+    fastboot_buffer      Image download address
+    fastboot_bytes       reflect previous download image byte size 
+
 ## write image to emmc
 
     uuu FB: flash -raw2sparse raw <image file>
