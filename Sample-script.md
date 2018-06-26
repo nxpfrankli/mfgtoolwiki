@@ -21,6 +21,21 @@
 
 # Burn yocto image to eMMC
     
+    uuu_version 1.0.1
+    SDPS: boot -f flash.bin
+    FB: flash -raw2sparse raw yocto.sdcard
+    FB: ucmd setenv fastboot_buffer ${loadaddr}
+    FB: download -f flash.bin
+    FB: ucmd setexpr fastboot_blk ${fastboot_bytes}
+    FB: ucmd setexpr fastboot_blk ${fastboot_blk} + 0x1FF
+    FB: ucmd setexpr fastboot_blk ${fastboot_blk} / 0x200
+    FB: ucmd mmc partconf 0 1 1 1
+    FB: ucmd echo ${fastboot_buffer}
+    FB: ucmd echo ${fastboot_blk}
+    FB: ucmd mmc write ${fastboot_buffer} 0x40  ${fastboot_blk}
+    FB: ucmd mmc partconf 0 1 1 0
+    FB: Done
+
 # Use kernel burn image to eMMC (similar with old mfgtools xml)
 
     uuu_version 1.0.1
