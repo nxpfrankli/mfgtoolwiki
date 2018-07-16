@@ -1,4 +1,4 @@
-Most case user use uboot fastboot protocol can finish image program work. 
+Most case user can use uboot fastboot protocol to finish image program work. 
 In case you have to load kernel to burn whole image. 
 
 The below simple map ucl2.xml to uuu script. 
