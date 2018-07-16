@@ -19,6 +19,7 @@ SDPU: jump
 		loadSection="OTH" setSection="OTH" HasFlashHeader="FALSE" ifdev="MX8QXP MX8QM">Loading Kernel.</CMD>
 
 FB: ucmd setenv fastboot_buffer ${loadaddr}
+
 FB: ucmd download -f Image
 
 		
@@ -26,12 +27,14 @@ FB: ucmd download -f Image
 		loadSection="OTH" setSection="OTH" HasFlashHeader="FALSE" ifdev="MX8QM MX8QXP">Loading Initramfs.</CMD>
 
 FB: ucmd setenv fastboot_buffer ${initrd_addr}
+
 FB: ucmd download -f initramfs.cpio.gz.uboot
 
         <CMD state="BootStrap" type="load" file="firmware/fsl-imx8qxp.dtb" address="0x83000000"
 		loadSection="OTH" setSection="OTH" HasFlashHeader="FALSE" ifdev="MX8QXP">Loading device tree.</CMD>
 
 FB: ucmd setenv fastboot_buffer ${fdt_addr}
+
 FB: ucmd download -f fsl-imx8qxp.dtb
 	
 	<CMD state="BootStrap" type="jump" > Jumping to OS image. </CMD>
