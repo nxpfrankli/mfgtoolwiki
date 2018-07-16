@@ -10,7 +10,9 @@ SDPS: boot -f flash.bin
 	<CMD state="BootStrap" type="boot" body="BootStrap" file ="firmware/flash.bin" ifdev="MX8MM">Loading U-boot</CMD>
 
 SDP: boot -f flash.bin
+
 SDPU: write -f flash.bin -offset 0x57c00
+
 SDPU: jump
 
 	<CMD state="BootStrap" type="load" file="firmware/Image" address="0x80280000"
