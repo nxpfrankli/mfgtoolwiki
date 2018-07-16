@@ -85,24 +85,53 @@ FBK: ucmd vfat /dev/mmcblk0p1 /mnt/mmcblk0p1
 
 	<!-- burn zImage -->
 	<CMD state="Updater" type="push" body="send" file="files/Image">Sending kernel</CMD>
-	<CMD state="Updater" type="push" body="$ cp $FILE /mnt/mmcblk%mmc%p1/Image">write kernel image to sd card</CMD>
+
+FBK: ucp Image t:/tmp
+
+	<CMD state="Updater" type="push" body="$ cp $FILE /mnt/mmcblk0p1/Image">write kernel image to sd card</CMD>
+
+FBK: ucmd /tmp/Image /mnt/mmcblk0p1/Image
 
 	<!-- burn dtb -->
-	<CMD state="Updater" type="push" body="send" file="files/fsl-imx8qm%dash%%ddr%-%board%.dtb" ifdev="MX8QM">Sending Device Tree file</CMD>
-	<CMD state="Updater" type="push" body="send" file="files/fsl-imx8qxp%dash%%ddr%-%board%.dtb" ifdev="MX8QXP MX8QXPB0">Sending Device Tree file</CMD>
-	<CMD state="Updater" type="push" body="send" file="files/fsl-imx8mq-evk.dtb" ifdev="MX8MQ">Sending Device Tree file</CMD>
-	<CMD state="Updater" type="push" body="$ cp $FILE /mnt/mmcblk%mmc%p1/fsl-imx8qm%dash%%ddr%-%board%.dtb" ifdev="MX8QM">write device tree to sd card</CMD>
-	<CMD state="Updater" type="push" body="$ cp $FILE /mnt/mmcblk%mmc%p1/fsl-imx8qxp%dash%%ddr%-%board%.dtb" ifdev="MX8QXP MX8QXPB0">write device tree to sd card</CMD>
-	<CMD state="Updater" type="push" body="$ cp $FILE /mnt/mmcblk%mmc%p1/fsl-imx8mq-evk.dtb" ifdev="MX8MQ">write device tree to sd card</CMD>
-	<!-- burn m4 demo bins-->
+	<CMD state="Updater" type="push" body="send" file="files/fsl-imx8qxp.dtb" ifdev="MX8QXP MX8QXPB0">Sending Device Tree file</CMD>
 
-	<CMD state="Updater" type="push" body="$ umount /mnt/mmcblk%mmc%p1">Unmounting vfat partition</CMD>
+FBK: ucp fsl-imx8qxp.dtb /tmp
+
+	<CMD state="Updater" type="push" body="$ cp $FILE /mnt/mmcblk0p1/fsl-imx8qm.dtb" ifdev="MX8QM">write device tree to sd card</CMD>
+
+FBK: ucmd cp /tmp/fsl-imx8qxp.dtb /mnt/mmcblk0p1/
+
+	<CMD state="Updater" type="push" body="$ umount /mnt/mmcblk0p1">Unmounting vfat partition</CMD>
+
+FBK: ucmd umount /mnt/mmcblk0p1
 
 	<!-- burn rootfs -->
-	<CMD state="Updater" type="push" body="$ mkfs.ext3 -F -j /dev/mmcblk%mmc%p2">Formatting rootfs partition</CMD>
-	<CMD state="Updater" type="push" body="$ mkdir -p /mnt/mmcblk%mmc%p2"/>
-	<CMD state="Updater" type="push" body="$ mount -t ext3 /dev/mmcblk%mmc%p2 /mnt/mmcblk%mmc%p2"/>
-	<CMD state="Updater" type="push" body="pipe tar -jxv -C /mnt/mmcblk%mmc%p2" file="files/rootfs.tar.bz2">Sending and writting rootfs</CMD>
+	<CMD state="Updater" type="push" body="$ mkfs.ext3 -F -j /dev/mmcblk0p2">Formatting rootfs partition</CMD>
+
+FBK: ucmd mkfs.ext3 -F -j /dev/mmcblk0p2
+
+	<CMD state="Updater" type="push" body="$ mkdir -p /mnt/mmcblk0p2"/>
+
+FBK: ucmd mkdir -p /mnt/mmcblk0p2
+
+	<CMD state="Updater" type="push" body="$ mount -t ext3 /dev/mmcblk0p2 /mnt/mmcblk0p2"/>
+
+FBK: ucmd mount -t ext3 /dev/mmcblk0p2 /mnt/mmcblk0p2
+
+	<CMD state="Updater" type="push" body="pipe tar -jxv -C /mnt/mmcblk0p2" file="files/rootfs.tar.bz2">Sending and writting rootfs</CMD>
+
+FBK: acmd tar -jxv -C /mnt/mmcblk0p2
+
+FBK: ucp rootfs.tar.bz2 t:-
+
 	<CMD state="Updater" type="push" body="frf">Finishing rootfs write</CMD>
-	<CMD state="Updater" type="push" body="$ umount /mnt/mmcblk%mmc%p2">Unmounting rootfs partition</CMD>
+
+FBK: sync
+
+	<CMD state="Updater" type="push" body="$ umount /mnt/mmcblk0p2">Unmounting rootfs partition</CMD>
+
+FBK: ucmd umount /mnt/mmcblk0p2
+
 	<CMD state="Updater" type="push" body="$ echo Update Complete!">Done</CMD>
+
+FBK: done
