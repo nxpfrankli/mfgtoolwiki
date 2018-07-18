@@ -11,6 +11,7 @@
         SDP:     MX6ULL  0x15a2  0x0080
         SDP:     MX6SLL  0x1fc9  0x0128
         SDP:     MX7ULP  0x1fc9  0x0054
+        SDP:     MX8MM   0x1fc9  0x0134
         SDP:     MXRT106X  0x1fc9  0x0135
         SDPU:    SPL     0x0525  0xb4a4
         FBK:             0x066f  0x9afe
