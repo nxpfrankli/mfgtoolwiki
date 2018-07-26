@@ -1,5 +1,5 @@
-Path in menuconfig
-Device Drivers
+      Path in menuconfig
+      Device Drivers
       USB support
              USB gadget support (very last entry)
                     USB Gadget Drivers (...)
