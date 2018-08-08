@@ -14,7 +14,7 @@
 
     uuu sdpu: write -f flash.bin -offset 0x57c00 -addr 0x40800000
 
-    uuu spdu: jump -addr 0x40800000
+    uuu sdpu: jump -addr 0x40800000
 
 ## Burn Android Image to eMMC
 
