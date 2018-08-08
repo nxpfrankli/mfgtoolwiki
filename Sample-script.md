@@ -3,8 +3,8 @@
     uuu_version 1.0.1
     sdp: boot -f flash.bin
     sdpu: write -f flash.bin -offset 0x57c00 -addr 0x40800000
-    spdu: jump -addr 0x40800000
-    spdu: Done
+    sdpu: jump -addr 0x40800000
+    sdpu: Done
 
 # Burn android to eMMC
 
