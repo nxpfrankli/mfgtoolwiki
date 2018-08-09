@@ -2,6 +2,7 @@
 
     uuu_version 1.0.1
     sdp: boot -f flash.bin
+    sdpu: delay 1000
     sdpu: write -f flash.bin -offset 0x57c00
     sdpu: jump
     sdpu: Done
