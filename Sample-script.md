@@ -1,11 +1,11 @@
 # Download spl and uboot for imx8m
 
     uuu_version 1.0.1
-    sdp: boot -f flash.bin
-    sdpu: delay 1000
-    sdpu: write -f flash.bin -offset 0x57c00
-    sdpu: jump
-    sdpu: Done
+    SDP: boot -f flash.bin
+    SDPU: delay 1000
+    SDPU: write -f flash.bin -offset 0x57c00
+    SDPU: jump
+    SDPU: Done
 
 # Burn android to eMMC
 
