@@ -13,7 +13,6 @@
     uuu sdp: boot -f flash.bin
     uuu sdpu: delay 1000
     uuu sdpu: write -f flash.bin -offset 0x57c00
-
     uuu sdpu: jump
 
 ## Burn Android Image to eMMC
