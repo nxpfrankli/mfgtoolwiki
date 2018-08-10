@@ -42,17 +42,18 @@
 # Burn yocto image to eMMC
     
     uuu_version 1.0.1
-    SDPS: boot -f flash.bin
+    SDP: boot -f _flash.bin
+    # This command will be run when use SPL
+    SDPU: delay 1000
+    SDPU: write -f _flash.bin -offset 0x57c00
+    SDPU: jump
+    # This command will be run when ROM support stream mode
+
+    FB: ucmd setenv fastboot_dev mmc
+    FB: ucmd setenv mmcdev ${emmc_dev}
+    FB: ucmd mmc dev ${emmc_dev}
     FB: flash -raw2sparse raw yocto.sdcard
-    FB: ucmd setenv fastboot_buffer ${loadaddr}
-    FB: download -f flash.bin
-    FB: ucmd setexpr fastboot_blk ${fastboot_bytes}
-    FB: ucmd setexpr fastboot_blk ${fastboot_blk} + 0x1FF
-    FB: ucmd setexpr fastboot_blk ${fastboot_blk} / 0x200
-    FB: ucmd mmc partconf 0 1 1 1
-    FB: ucmd echo ${fastboot_buffer}
-    FB: ucmd echo ${fastboot_blk}
-    FB: ucmd mmc write ${fastboot_buffer} 0x40  ${fastboot_blk}
+    FB: flash bootloader _flash.bin
     FB: ucmd mmc partconf 0 1 1 0
     FB: Done
 
