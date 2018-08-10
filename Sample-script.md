@@ -1,5 +1,6 @@
 # Download spl and uboot
 
+    uuu_version 1.0.1
     SDP: boot -f _flash.bin
     # This command will be run when use SPL
     SDPU: delay 1000
@@ -10,6 +11,7 @@
 
 # Burn bootloader to eMMC boot partition
 
+    uuu_version 1.0.1
     SDP: boot -f _flash.bin
     # This command will be run when use SPL
     SDPU: delay 1000
