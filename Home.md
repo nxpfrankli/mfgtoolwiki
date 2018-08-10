@@ -4,6 +4,14 @@ Welcome to the uuu. Old name mfgtools.
 
 [Sample-script](Sample-script)
 
+Uboot fastboot environment
+
+fastboot_dev   fastboot flash device, support mmc and sata
+
+fastboot_buffer fastboot download buffer adddress
+
+fastboot_bytes fastboot download file size
+
 # Usage:
 
 
