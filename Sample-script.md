@@ -17,8 +17,8 @@
     SDPU: write -f _flash.bin -offset 0x57c00
     SDPU: jump
     # This command will be run when ROM support stream mode
-
     SDPS: boot -f flash.bin
+
     FB: ucmd setenv fastboot_dev mmc
     FB: ucmd setenv mmcdev ${emmc_dev}
     FB: ucmd mmc dev ${emmc_dev}
