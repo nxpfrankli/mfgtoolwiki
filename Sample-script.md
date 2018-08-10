@@ -17,6 +17,7 @@
     SDPU: jump
     # This command will be run when ROM support stream mode
     SDPS: boot -f flash.bin
+
     FB: ucmd setenv fastboot_dev mmc
     FB: ucmd setenv mmcdev ${emmc_dev}
     FB: ucmd mmc dev ${emmc_dev}
