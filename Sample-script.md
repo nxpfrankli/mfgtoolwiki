@@ -10,22 +10,33 @@
 # Burn android to eMMC
 
     uuu_version 1.0.1
+    SDP: boot -f _flash.bin
+    # This command will be run when use SPL
+    SDPU: delay 1000
+    SDPU: write -f _flash.bin -offset 0x57c00
+    SDPU: jump
+    # This command will be run when ROM support stream mode
+
     SDPS: boot -f flash.bin
+    FB: ucmd setenv fastboot_dev mmc
+    FB: ucmd setenv mmcdev ${emmc_dev}
+    FB: ucmd mmc dev ${emmc_dev}
     FB: flash gpt partition-table.img
     FB: flash boot_a boot-imx8qxp.img
     FB: flash system_a system.img
     FB: flash vendor_a vendor.img
     FB: flash vbmeta_a vbmeta-imx8qxp.img
-    FB: ucmd setenv fastboot_buffer ${loadaddr}
-    FB: download -f u-boot-imx8qxp.imx
-    FB: ucmd setexpr fastboot_blk ${fastboot_bytes}
-    FB: ucmd setexpr fastboot_blk ${fastboot_blk} + 0x1FF
-    FB: ucmd setexpr fastboot_blk ${fastboot_blk} / 0x200
-    FB: ucmd mmc partconf 0 1 1 1
-    FB: ucmd echo ${fastboot_buffer}
-    FB: ucmd echo ${fastboot_blk}
-    FB: ucmd mmc write ${fastboot_buffer} 0x40  ${fastboot_blk}
-    FB: ucmd mmc partconf 0 1 1 0
+    #FB: ucmd setenv fastboot_buffer ${loadaddr}
+    #FB: download -f u-boot-imx8qxp.imx
+    #FB: ucmd setexpr fastboot_blk ${fastboot_bytes}
+    #FB: ucmd setexpr fastboot_blk ${fastboot_blk} + 0x1FF
+    #FB: ucmd setexpr fastboot_blk ${fastboot_blk} / 0x200
+    #FB: ucmd mmc partconf ${emmc_dev} 1 1 1
+    #FB: ucmd echo ${fastboot_buffer}
+    #FB: ucmd echo ${fastboot_blk}
+    #FB: ucmd mmc write ${fastboot_buffer} 0x40  ${fastboot_blk}
+    FB: flash bootloader u-boot-imx8qxp.imx
+    FB: ucmd mmc partconf ${emmc_dev} 1 1 0
     FB: Done
 
 # Burn yocto image to eMMC
