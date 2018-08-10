@@ -53,7 +53,7 @@
     FB: ucmd setenv fastboot_dev mmc
     FB: ucmd setenv mmcdev ${emmc_dev}
     FB: ucmd mmc dev ${emmc_dev}
-    FB: flash -raw2sparse raw yocto.sdcard
+    FB: flash -raw2sparse all yocto.sdcard
     FB: flash bootloader _flash.bin
     FB: ucmd mmc partconf 0 1 1 0
     FB: Done
