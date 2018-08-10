@@ -1,4 +1,4 @@
-# Download spl and uboot
+# Download spl and uboot for imx8mm and imx8mq
 
     uuu_version 1.0.1
     SDP: boot -f _flash.bin
@@ -6,8 +6,7 @@
     SDPU: delay 1000
     SDPU: write -f _flash.bin -offset 0x57c00
     SDPU: jump
-    # This command will be run when ROM support stream mode
-    SDPS: boot -f flash.bin
+    SDPU: done
 
 # Burn bootloader to eMMC boot partition
 
