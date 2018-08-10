@@ -6,11 +6,15 @@ Welcome to the uuu. Old name mfgtools.
 
 Uboot fastboot environment
 
-fastboot_dev   fastboot flash device, support mmc and sata
+`fastboot_dev`   fastboot flash device, support mmc and sata
 
-fastboot_buffer fastboot download buffer adddress
+`fastboot_buffer` fastboot download buffer adddress
 
-fastboot_bytes fastboot download file size
+`fastboot_bytes` fastboot download file size
+
+`emmc_dev` eMMC device number
+
+`sd_dev`   sd slot device number
 
 # Usage:
 
