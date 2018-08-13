@@ -23,7 +23,7 @@
     FB: ucmd setenv mmcdev ${emmc_dev}
     FB: ucmd mmc dev ${emmc_dev}
     FB: flash bootloader _flash.bin
-    FB: ucmd mmc partconf ${emmc_dev} 1 1 0
+    FB: ucmd mmc partconf ${emmc_dev} 0 1 0
     FB: Done
 
 # Burn android to eMMC
@@ -55,7 +55,7 @@
     #FB: ucmd echo ${fastboot_blk}
     #FB: ucmd mmc write ${fastboot_buffer} 0x40  ${fastboot_blk}
     FB: flash bootloader u-boot-imx8qxp.imx
-    FB: ucmd mmc partconf ${emmc_dev} 1 1 0
+    FB: ucmd mmc partconf ${emmc_dev} 0 1 0
     FB: Done
 
 # Burn yocto image to eMMC
@@ -73,7 +73,7 @@
     FB: ucmd mmc dev ${emmc_dev}
     FB: flash -raw2sparse all yocto.sdcard
     FB: flash bootloader _flash.bin
-    FB: ucmd mmc partconf 0 1 1 0
+    FB: ucmd mmc partconf 0 0 1 0
     FB: Done
 
 # Use kernel burn image to eMMC (similar with old mfgtools xml)
