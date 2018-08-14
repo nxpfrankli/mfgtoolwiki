@@ -19,10 +19,6 @@
 
     uuu android.zip
 
-## Burn Yocto Image to eMMC
-
-    uuu yocto.sdcard
-
 # Talk with fastboot
 
 ## boot linux kernel
@@ -39,6 +35,6 @@ Extended environment for fastboot
 
 ## write image to emmc
 
-    uuu FB: flash -raw2sparse raw <image file>
+    uuu FB: flash -raw2sparse all <image file>
 
  
