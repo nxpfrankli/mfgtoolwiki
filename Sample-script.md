@@ -73,7 +73,7 @@
     FB: ucmd mmc dev ${emmc_dev}
     FB: flash -raw2sparse all yocto.sdcard
     FB: flash bootloader _flash.bin
-    FB: ucmd mmc partconf 0 0 1 0
+    FB: ucmd mmc partconf ${emmc_dev} 0 1 0
     FB: Done
 
 # Use kernel burn image to eMMC (similar with old mfgtools xml)
