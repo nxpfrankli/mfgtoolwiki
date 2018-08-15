@@ -38,4 +38,8 @@ Extended environment for fastboot
 
     uuu FB: flash -raw2sparse all <image file>
 
+# built-in script
+
+    uuu -b emmc bootloader              Write bootloader to emmc
+    uuu -b qspi bootloader              write bootloader to sd
  
