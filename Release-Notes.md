@@ -11,3 +11,4 @@
 ## Bug fixes
 * Fix sometime open usb device failure at windows platform.  
 * Fix protocol case sensitive problem in script
+* Fix open zip file failure
