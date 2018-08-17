@@ -61,68 +61,49 @@
 # Burn yocto image to eMMC
     
     uuu_version 1.0.1
+
     SDP: boot -f _flash.bin
     # This command will be run when use SPL
-    SDPU: delay 1000
     SDPU: write -f _flash.bin -offset 0x57c00
     SDPU: jump
     # This command will be run when ROM support stream mode
+    SDPS: boot -f _flash.bin
 
-    FB: ucmd setenv fastboot_dev mmc
-    FB: ucmd setenv mmcdev ${emmc_dev}
-    FB: ucmd mmc dev ${emmc_dev}
-    FB: flash -raw2sparse all yocto.sdcard
-    FB: flash bootloader _flash.bin
-    FB: ucmd mmc partconf ${emmc_dev} 0 1 0
-    FB: Done
+    FB: ucmd setenv fastboot_buffer ${loadaddr}
+    FB: download -f _Image
+    FB: ucmd setenv fastboot_buffer ${fdt_addr}
+    FB: download -f _board.dtb
+    FB: ucmd setenv fastboot_buffer ${initrd_addr}
+    FB: download -f _initramfs.cpio.gz.uboot
+    FB: ucmd setenv mfgtool_args ${mfgtool_args} mfg_mmcdev=${emmc_dev}
+    FB: ucmd run mfgtool_args
+    FB: acmd booti ${loadaddr} ${initrd_addr} ${fdt_addr}
 
-# Use kernel burn image to eMMC (similar with old mfgtools xml)
+    # get mmc dev number from kernel command line
+    FBK: ucmd cmdline=`cat /proc/cmdline`;cmdline=${cmdline#*mfg_mmcdev=};cmds=($cmdline);echo ${cmds[0]}>/tmp/mmcdev
+    # Wait for mmc
+    FBK: ucmd mmc=`cat /tmp/mmcdev`; while [ ! -e /dev/mmcblk${mmc} ]; do sleep 1; echo "wait for /dev/mmcblk${mmc} appear"; done;
+    # create partition
+    FBK: ucmd mmc=`cat /tmp/mmcdev`; PARTSTR=$'10M,500M,0c\n600M,,83\n'; echo "$PARTSTR" | sfdisk --force /dev/mmcblk${mmc}
 
-  uuu_version 1.0.1
-
-  SDP: boot -f _flash.bin
-  # This command will be run when use SPL
-  SDPU: write -f _flash.bin -offset 0x57c00
-  SDPU: jump
-  # This command will be run when ROM support stream mode
-  SDPS: boot -f _flash.bin
-
-  FB: ucmd setenv fastboot_buffer ${loadaddr}
-  FB: download -f _Image
-  FB: ucmd setenv fastboot_buffer ${fdt_addr}
-  FB: download -f _board.dtb
-  FB: ucmd setenv fastboot_buffer ${initrd_addr}
-  FB: download -f _initramfs.cpio.gz.uboot
-  FB: ucmd setenv mfgtool_args ${mfgtool_args} mfg_mmcdev=${emmc_dev}
-  FB: ucmd run mfgtool_args
-  FB: acmd booti ${loadaddr} ${initrd_addr} ${fdt_addr}
-
-  # all files _* will be written to eMMC. 
-  # get mmc dev number from kernel command line
-  FBK: ucmd cmdline=`cat /proc/cmdline`;cmdline=${cmdline#*mfg_mmcdev=};cmds=($cmdline);echo ${cmds[0]}>/tmp/mmcdev
-  # Wait for mmc
-  FBK: ucmd mmc=`cat /tmp/mmcdev`; while [ ! -e /dev/mmcblk${mmc} ]; do sleep 1; echo "wait for /dev/mmcblk${mmc} appear"; done;
-  # create partition
-  FBK: ucmd mmc=`cat /tmp/mmcdev`; PARTSTR=$'10M,500M,0c\n600M,,83\n'; echo "$PARTSTR" | sfdisk --force /dev/mmcblk${mmc}
-
-  FBK: ucmd mmc=`cat /tmp/mmcdev`; dd if=/dev/zero of=/dev/mmcblk${mmc} bs=1k seek=4096 count=1
-  FBK: ucmd sync
-  FBK: ucmd mmc=`cat /tmp/mmcdev`; echo 0 > /sys/block/mmcblk${mmc}boot0/force_ro
-  FBK: ucp  _flash.bin t:/tmp
-  FBK: ucmd mmc=`cat /tmp/mmcdev`; dd if=/tmp/_flash.bin of=/dev/mmc${mmc}boot0 bs=1K seek=32
-  FBK: ucmd mmc=`cat /tmp/mmcdev`; echo 1 > /sys/block/mmcblk${mmc}boot0/force_ro
-  FBK: ucmd mmc=`cat /tmp/mmcdev`; while [ ! -e /dev/mmcblk${mmc}p1 ]; do sleep 1; done
-  FBK: ucmd mmc=`cat /tmp/mmcdev`; mkfs.vfat /dev/mmcblk${mmc}p1
-  FBK: ucmd mmc=`cat /tmp/mmcdev`; mkdir -p /mnt/fat
-  FBK: ucmd mmc=`cat /tmp/mmcdev`; mount -t vfat /dev/mmcblk${mmc}p1 /mnt/fat
-  FBK: ucp  _Image t:/mnt/fat
-  FBK: ucp  _board.dtb t:/mnt/fat
-  FBK: ucmd umount /mnt/fat
-  FBK: ucmd mmc=`cat /tmp/mmcdev`; mkfs.ext3 -F -E nodiscard /dev/mmcblk${mmc}p2
-  FBK: ucmd mkdir -p /mnt/ext3
-  FBK: ucmd mmc=`cat /tmp/mmcdev`; mount /dev/mmcblk${mmc}p2 /mnt/ext3
-  FBK: acmd tar -jxv -C /mnt/ext3
-  FBK: ucp  _rootfs.tar.bz2 t:-
-  FBK: Sync
-  FBK: ucmd umount /mnt/ext3
-  FBK: DONE
+    FBK: ucmd mmc=`cat /tmp/mmcdev`; dd if=/dev/zero of=/dev/mmcblk${mmc} bs=1k seek=4096 count=1
+    FBK: ucmd sync
+    FBK: ucmd mmc=`cat /tmp/mmcdev`; echo 0 > /sys/block/mmcblk${mmc}boot0/force_ro
+    FBK: ucp  _flash.bin t:/tmp
+    FBK: ucmd mmc=`cat /tmp/mmcdev`; dd if=/tmp/_flash.bin of=/dev/mmc${mmc}boot0 bs=1K seek=32
+    FBK: ucmd mmc=`cat /tmp/mmcdev`; echo 1 > /sys/block/mmcblk${mmc}boot0/force_ro
+    FBK: ucmd mmc=`cat /tmp/mmcdev`; while [ ! -e /dev/mmcblk${mmc}p1 ]; do sleep 1; done
+    FBK: ucmd mmc=`cat /tmp/mmcdev`; mkfs.vfat /dev/mmcblk${mmc}p1
+    FBK: ucmd mmc=`cat /tmp/mmcdev`; mkdir -p /mnt/fat
+    FBK: ucmd mmc=`cat /tmp/mmcdev`; mount -t vfat /dev/mmcblk${mmc}p1 /mnt/fat
+    FBK: ucp  _Image t:/mnt/fat
+    FBK: ucp  _board.dtb t:/mnt/fat
+    FBK: ucmd umount /mnt/fat
+    FBK: ucmd mmc=`cat /tmp/mmcdev`; mkfs.ext3 -F -E nodiscard /dev/mmcblk${mmc}p2
+    FBK: ucmd mkdir -p /mnt/ext3
+    FBK: ucmd mmc=`cat /tmp/mmcdev`; mount /dev/mmcblk${mmc}p2 /mnt/ext3
+    FBK: acmd tar -jxv -C /mnt/ext3
+    FBK: ucp  _rootfs.tar.bz2 t:-
+    FBK: Sync
+    FBK: ucmd umount /mnt/ext3
+    FBK: DONE
