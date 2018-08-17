@@ -78,29 +78,51 @@
 
 # Use kernel burn image to eMMC (similar with old mfgtools xml)
 
-    uuu_version 1.0.1
-    SDPS: boot -f flash_mfg.bin
-    FBK: ucp mksdcard.sh t:/tmp
-    FBK: ucmd chmod 777 /tmp/mksdcard.sh
-    FBK: ucmd /tmp/mksdcard.sh /dev/mmcblk0
-    FBK: ucmd dd if=/dev/zero of=/dev/mmcblk0 bs=1k seek=4096 count=1
-    FBK: ucmd sync
-    FBK: ucmd echo 0 > /sys/block/mmcblk0boot0/force_ro
-    FBK: ucp flash.bin t:/tmp
-    FBK: ucmd dd if=/tmp/flash.bin of=/dev/mmc0boot0 bs=1K seek=32
-    FBK: ucmd echo 1 > /sys/block/mmcblk0boot0/force_ro
-    FBK: ucmd while [ ! -e /dev/mmcblk0p1 ]; do sleep 1; done
-    FBK: ucmd mkfs.vfat /dev/mmcblk0p1
-    FBK: ucmd mkdir -p /mnt/mmcblk0p1
-    FBK: ucmd mount -t vfat /dev/mmcblk0p1 /mnt/mmcblk0p1
-    FBK: ucp Image t:/mnt/mmcblk0p1
-    FBK: ucp fsl-imx8qxp-mek.dtb t:/mnt/mmcblk0p1
-    FBK: ucmd umount /mnt/mmcblk0p1
-    FBK: ucmd mkfs.ext3 -F -E nodiscard /dev/mmcblk0p2
-    FBK: ucmd mkdir -p /mnt/ext3
-    FBK: ucmd mount /dev/mmcblk0p2 /mnt/ext3
-    FBK: acmd tar -jxv -C /mnt/ext3
-    FBK: ucp rootfs.tar.bz2 t:-
-    FBK: Sync
-    FBK: ucmd umount /mnt/ext3
-    FBK: DONE
+  uuu_version 1.0.1
+
+  SDP: boot -f _flash.bin
+  # This command will be run when use SPL
+  SDPU: write -f _flash.bin -offset 0x57c00
+  SDPU: jump
+  # This command will be run when ROM support stream mode
+  SDPS: boot -f _flash.bin
+
+  FB: ucmd setenv fastboot_buffer ${loadaddr}
+  FB: download -f _Image
+  FB: ucmd setenv fastboot_buffer ${fdt_addr}
+  FB: download -f _board.dtb
+  FB: ucmd setenv fastboot_buffer ${initrd_addr}
+  FB: download -f _initramfs.cpio.gz.uboot
+  FB: ucmd setenv mfgtool_args ${mfgtool_args} mfg_mmcdev=${emmc_dev}
+  FB: ucmd run mfgtool_args
+  FB: acmd booti ${loadaddr} ${initrd_addr} ${fdt_addr}
+
+  # all files _* will be written to eMMC. 
+  # get mmc dev number from kernel command line
+  FBK: ucmd cmdline=`cat /proc/cmdline`;cmdline=${cmdline#*mfg_mmcdev=};cmds=($cmdline);echo ${cmds[0]}>/tmp/mmcdev
+  # Wait for mmc
+  FBK: ucmd mmc=`cat /tmp/mmcdev`; while [ ! -e /dev/mmcblk${mmc} ]; do sleep 1; echo "wait for /dev/mmcblk${mmc} appear"; done;
+  # create partition
+  FBK: ucmd mmc=`cat /tmp/mmcdev`; PARTSTR=$'10M,500M,0c\n600M,,83\n'; echo "$PARTSTR" | sfdisk --force /dev/mmcblk${mmc}
+
+  FBK: ucmd mmc=`cat /tmp/mmcdev`; dd if=/dev/zero of=/dev/mmcblk${mmc} bs=1k seek=4096 count=1
+  FBK: ucmd sync
+  FBK: ucmd mmc=`cat /tmp/mmcdev`; echo 0 > /sys/block/mmcblk${mmc}boot0/force_ro
+  FBK: ucp  _flash.bin t:/tmp
+  FBK: ucmd mmc=`cat /tmp/mmcdev`; dd if=/tmp/_flash.bin of=/dev/mmc${mmc}boot0 bs=1K seek=32
+  FBK: ucmd mmc=`cat /tmp/mmcdev`; echo 1 > /sys/block/mmcblk${mmc}boot0/force_ro
+  FBK: ucmd mmc=`cat /tmp/mmcdev`; while [ ! -e /dev/mmcblk${mmc}p1 ]; do sleep 1; done
+  FBK: ucmd mmc=`cat /tmp/mmcdev`; mkfs.vfat /dev/mmcblk${mmc}p1
+  FBK: ucmd mmc=`cat /tmp/mmcdev`; mkdir -p /mnt/fat
+  FBK: ucmd mmc=`cat /tmp/mmcdev`; mount -t vfat /dev/mmcblk${mmc}p1 /mnt/fat
+  FBK: ucp  _Image t:/mnt/fat
+  FBK: ucp  _board.dtb t:/mnt/fat
+  FBK: ucmd umount /mnt/fat
+  FBK: ucmd mmc=`cat /tmp/mmcdev`; mkfs.ext3 -F -E nodiscard /dev/mmcblk${mmc}p2
+  FBK: ucmd mkdir -p /mnt/ext3
+  FBK: ucmd mmc=`cat /tmp/mmcdev`; mount /dev/mmcblk${mmc}p2 /mnt/ext3
+  FBK: acmd tar -jxv -C /mnt/ext3
+  FBK: ucp  _rootfs.tar.bz2 t:-
+  FBK: Sync
+  FBK: ucmd umount /mnt/ext3
+  FBK: DONE
