@@ -137,3 +137,4 @@
     #uncomment below line to stop at initramfs
     #FB: ucmd setenv bootargs console=${console},${baudrate} nfsroot=${nfsroot}
     FB: acmd ${kboot} ${loadaddr} ${initrd_addr} ${fdt_addr}
+    FB: done
