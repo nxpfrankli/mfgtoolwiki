@@ -107,3 +107,33 @@
     FBK: Sync
     FBK: ucmd umount /mnt/ext3
     FBK: DONE
+
+# Download kernel and mount nfs by usb ncm
+
+    uuu_version 1.0.1
+
+    # Please replace below item with actual name
+    # @_flash.bin                   | boot loader
+    # @_Image                       | linux kernel image, zImage for arm32, Image for arm64
+    # @_board.dtb                   | board dtb file
+    # @_initramfs.cpio.gz.uboot     | initramfs
+    # @_nfspath                     | rootfs path without ip address, ip address will auto detect
+
+    SDP: boot -f _flash.bin
+    # This command will be run when use SPL
+    SDPU: write -f _flash.bin -offset 0x57c00
+    SDPU: jump
+    # This command will be run when ROM support stream mode
+    SDPS: boot -f _flash.bin
+
+    FB: ucmd setenv fastboot_buffer ${loadaddr}
+    FB: download -f _Image
+    FB: ucmd setenv fastboot_buffer ${fdt_addr}
+    FB: download -f _board.dtb
+    FB: ucmd setenv fastboot_buffer ${initrd_addr}
+    FB: download -f _initramfs.cpio.gz.uboot
+    FB: ucmd setenv nfsroot _nfspath
+    FB: ucmd setenv bootargs console=${console},${baudrate} nfsroot=${nfsroot} init=/linuxrc
+    #uncomment below line to stop at initramfs
+    #FB: ucmd setenv bootargs console=${console},${baudrate} nfsroot=${nfsroot}
+    FB: acmd ${kboot} ${loadaddr} ${initrd_addr} ${fdt_addr}
