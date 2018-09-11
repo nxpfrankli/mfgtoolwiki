@@ -133,7 +133,7 @@
     FB: ucmd setenv fastboot_buffer ${initrd_addr}
     FB: download -f _initramfs.cpio.gz.uboot
     FB: ucmd setenv nfsroot _nfspath
-    FB: ucmd setenv bootargs console=${console},${baudrate} nfsroot=${nfsroot} init=/linuxrc
+    FB: ucmd setenv bootargs console=${console},${baudrate} nfsroot=${nfsroot} init=/linuxrc root=/dev/nfs
     #uncomment below line to stop at initramfs
     #FB: ucmd setenv bootargs console=${console},${baudrate} nfsroot=${nfsroot}
     FB: acmd ${kboot} ${loadaddr} ${initrd_addr} ${fdt_addr}
