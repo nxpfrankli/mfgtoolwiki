@@ -14,4 +14,4 @@
 * Fix open zip file failure
 
 ## Known issue
-* some old i.MX8MM board can't work in linux system.  Need apply ROM patch to fix. Please contact FAE. 
+* some old i.MX8MM board HID can't work in linux system.  Need apply ROM patch to fix. Please contact FAE. 
