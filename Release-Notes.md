@@ -1,4 +1,4 @@
-# 1.1.TBD
+# 1.1.41
 ## New features
 * Support SDP protocol (i.MX6x, i.MX7, i.MX8M, i.MX8MM)
 * Support SDPS protocol (i.MX8QXP B0, i.MX8QM B0)
@@ -12,3 +12,6 @@
 * Fix sometime open usb device failure at windows platform.  
 * Fix protocol case sensitive problem in script
 * Fix open zip file failure
+
+## Known issue
+* some old i.MX8MM board can't work in linux system.  Need apply ROM patch to fix. Please contact FAE. 
