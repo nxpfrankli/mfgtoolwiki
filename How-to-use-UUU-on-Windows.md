@@ -39,7 +39,7 @@ The list of dependencies to use UUU on Windows is listed below.
 
 1. `libusb-1.0.dll`
 2. (optional) A serial console emulator (such as [Putty](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) or [TeraTerm](https://osdn.net/projects/ttssh2/releases/))
-3. (optional) The USB to serial converter driver.
+3. (optional) The USB to serial converter driver (see [[How-to-install-USB-to-serial-driver-on-Windows]] for detail)
 
 ## Using the UUU
 
