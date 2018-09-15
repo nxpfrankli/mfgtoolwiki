@@ -1,3 +1,7 @@
+This pages list some examples on scripts to help UUU to make some tasks automatically.
+
+Copy the source code to the file `uuu.auto` and execute the application executable file.
+
 # Download spl and uboot for imx8mm and imx8mq
 
     uuu_version 1.0.1
