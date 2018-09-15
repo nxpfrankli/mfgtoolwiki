@@ -1,23 +1,8 @@
-Welcome to the uuu. Old name mfgtools.
+Welcome to the UUU (Universal Update Utility). This is an evolution of MFGTools (aka MFGTools v3).
 
-[Usage Example](Example)
+With the time, the need for an update utility portable to Linux and Windows increased. UUU have the same usage on both Windows and Linux. It means the same script works on both OS.
 
-[Sample-script](Sample-script)
-
-Uboot fastboot environment
-
-`fastboot_dev`   fastboot flash device, support mmc and sata
-
-`fastboot_buffer` fastboot download buffer adddress
-
-`fastboot_bytes` fastboot download file size
-
-`emmc_dev` eMMC device number
-
-`sd_dev`   sd slot device number
-
-# Usage:
-
+# Usage
 
     uuu [-d -m -v] u-boot.imx\flash.bin
              Download u-boot.imx\flash.bin to board by usb
@@ -77,3 +62,19 @@ Uboot fastboot environment
      SDP: write -f zImage-imx7d-sdb.dtb -addr 0x83000000
      SDP: write -f fsl-image-mfgtool-initramfs-imx_mfgtools.cpio.gz.u-boot -addr 0x83800000
      SDP: jump -f u-boot-dtb.imx -ivt
+
+# Uboot fastboot environment
+
+Variable | Description
+---------|------------
+`fastboot_dev`|fastboot flash device, support mmc and sata
+`fastboot_buffer`|fastboot download buffer adddress
+`fastboot_bytes`|fastboot download file size
+`emmc_dev`|eMMC device number
+`sd_dev`|sd slot device number
+
+# Example
+
+See some examples on how to use UUU
+* [Usage Example](Example)
+* [Sample-script](Sample-script)
