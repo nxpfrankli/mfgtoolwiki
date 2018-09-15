@@ -2,6 +2,10 @@ Welcome to the UUU (Universal Update Utility). This is an evolution of MFGTools 
 
 With the time, the need for an update utility portable to Linux and Windows increased. UUU have the same usage on both Windows and Linux. It means the same script works on both OS.
 
+# L4.9.123_2.3.0_8MM GA
+
+For L4.9.123_2.3.0_8MM GA with i.MX8M Mini, see [[How-to-use-UUU-on-Windows]]
+
 # Usage
 
     uuu [-d -m -v] u-boot.imx\flash.bin
