@@ -54,4 +54,4 @@ Extended environment for fastboot
    uuu -d -m 1:1 2:1 boardA_uuu.auto           monitor port 1:1 and 2:1 for boardsA.
    uuu -d -m 1:3: 4:1 boardB_uuu.auto          monitor port 1:3 and 4:1 for boardsB. 
 
-** Note: please avoid monitor the same port by difference uuu instance, which cause unexpected result. **         
+**Note: please avoid monitor the same port by difference uuu instance, which cause unexpected result.**        
